@@ -1,0 +1,55 @@
+DOCUMENTATION API - ORGANIZ'ASSO
+
+
+--- STATUT & TESTS ---
+
+GET  /api/status
+    - Vérifie si le serveur répond.
+    - Retour : "Serveur fonctionne bien !"
+
+GET  /
+    - Route racine de test.
+    - Retour : "test"
+
+
+--- MESSAGES ---
+
+GET  /api/messages
+    - Récupère la liste complète des messages du forum.
+    - Retour : [ { message1 }, { message2 }, ... ]
+
+
+--- UTILISATEURS (USERS) ---
+
+GET  /api/users
+    - Récupère la liste de tous les utilisateurs inscrits.
+    - Retour : [ { user1 }, { user2 }, ... ]
+
+GET  /api/user/:prenom/:nom
+    - Recherche un utilisateur par son prénom et son nom.
+    - Paramètres : prenom, nom (dans l'URL)
+    - Retour : L'objet utilisateur ou Erreur 404 si non trouvé.
+
+POST /api/users
+    - Inscrit un nouvel utilisateur en base de données.
+    - Body (JSON) requis : 
+    { 
+        "prenom": "Jean", 
+        "nom": "Dupont",
+        "login": "jdupont",
+        "password": "...",
+        ... 
+    }
+    - Retour : Message de succès (201) ou Erreur 400 si nom/prénom manquants.
+
+
+--- AUTHENTIFICATION ---
+
+POST /api/auth/login
+    - Connecte un utilisateur existant.
+    - Body (JSON) requis :
+    {
+        "login": "monLogin",
+        "password": "monPassword"
+    }
+    - Retour : { "response": "OK" } en cas de succès.

@@ -1,0 +1,14 @@
+======================================================
+         PROCÉDURE DE LANCEMENT - ORGANIZ'ASSO
+======================================================
+
+
+1. DÉMARRER MONGODB :
+
+
+2. DÉMARRER LE SERVEUR :
+    Aller dans server : cd /server
+    lancer $> npm start
+
+3. VÉRIFIER QUE ÇA MARCHE :
+   - Aller sur : http://localhost:3001/api/status
