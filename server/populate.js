@@ -1,6 +1,6 @@
 const { MongoClient } = require('mongodb');
 
-async function fillDB(client, dbName, collectionName) {
+async function testDB(client, dbName, collectionName) {
     test = {
         init: true
     }
@@ -21,15 +21,52 @@ async function fillDB(client, dbName, collectionName) {
 
 async function populate(client, dbName) {
     const listUsers = [
-        { prenom: "Alice", nom: "Dupont", email: "alice.dupont@example.com", age: 28, role: "admin", isActive: true, createdAt: new Date() },
-        { prenom: "Bob", nom: "Martin", email: "bob.martin@example.com", age: 34, role: "user", isActive: true, createdAt: new Date() },
-        { prenom: "Charlie", nom: "Durand", email: "charlie.durand@example.com", age: 22, role: "user", isActive: false, createdAt: new Date() },
-        { prenom: "Diane", nom: "Lefebvre", email: "diane.lefebvre@example.com", age: 41, role: "editor", isActive: true, createdAt: new Date() },
-        { prenom: "Emile", nom: "Moreau", email: "emile.moreau@example.com", age: 19, role: "user", isActive: true, createdAt: new Date() },
-        { prenom: "Fanny", nom: "Laurent", email: "fanny.laurent@example.com", age: 30, role: "user", isActive: true, createdAt: new Date() },
-        { prenom: "Gaston", nom: "Simon", email: "gaston.simon@example.com", age: 55, role: "admin", isActive: true, createdAt: new Date() },
-        { prenom: "Hélène", nom: "Michel", email: "helene.michel@example.com", age: 27, role: "editor", isActive: false, createdAt: new Date() },
-        { prenom: "Igor", nom: "Garcia", email: "igor.garcia@example.com", age: 38, role: "user", isActive: true, createdAt: new Date() },
+        { 
+            prenom: "Alice", nom: "Dupont", 
+            login: "alice", password: "password123", 
+            email: "alice.dupont@example.com", age: 28, role: "admin", isActive: true, createdAt: new Date() 
+        },
+        { 
+            prenom: "Bob", nom: "Martin", 
+            login: "bob", password: "password123", 
+            email: "bob.martin@example.com", age: 34, role: "user", isActive: true, createdAt: new Date() 
+        },
+        { 
+            prenom: "Charlie", nom: "Durand", 
+            login: "charlie", password: "password123", 
+            email: "charlie.durand@example.com", age: 22, role: "user", isActive: false, createdAt: new Date() 
+        },
+        { 
+            prenom: "Diane", nom: "Lefebvre", 
+            login: "diane", password: "password123", 
+            email: "diane.lefebvre@example.com", age: 41, role: "editor", isActive: true, createdAt: new Date() 
+        },
+        { 
+            prenom: "Emile", nom: "Moreau", 
+            login: "emile", password: "password123", 
+            email: "emile.moreau@example.com", age: 19, role: "user", isActive: true, createdAt: new Date() 
+        },
+        { 
+            prenom: "Fanny", nom: "Laurent", 
+            login: "fanny", password: "password123", 
+            email: "fanny.laurent@example.com", age: 30, role: "user", isActive: true, createdAt: new Date() 
+        },
+        { 
+            prenom: "Gaston", nom: "Simon", 
+            login: "gaston", password: "password123", 
+            email: "gaston.simon@example.com", age: 55, role: "admin", isActive: true, createdAt: new Date() 
+        },
+        { 
+            prenom: "Hélène", nom: "Michel", 
+            login: "helene", password: "password123", 
+            email: "helene.michel@example.com", age: 27, role: "editor", isActive: false, createdAt: new Date() 
+        },
+        { 
+            prenom: "Igor", nom: "Garcia", 
+            login: "igor", password: "password123", 
+            email: "igor.garcia@example.com", age: 38, role: "user", isActive: true, createdAt: new Date() 
+        }
+
     ];
 
     const userCollection = await client.db(dbName).collection("users");
@@ -163,7 +200,7 @@ async function main() {
     try {
         await client.connect();
 
-        await fillDB(client, "projetDB", "testing");
+        await testDB(client, "projetDB", "testing");
 
     } catch(e) {
         console.log(e);
