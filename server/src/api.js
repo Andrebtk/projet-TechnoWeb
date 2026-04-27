@@ -1,3 +1,4 @@
+/*
 const { MongoClient } = require('mongodb');
 
 
@@ -7,130 +8,131 @@ const client = new MongoClient(uri);
 let isConnected = false;
 
 async function connectDB(){
-    if(!isConnected) {
-        await client.connect();
-        isConnected = true;
-        console.log("Connexion à MongoDB réussie !")
-    }
+	if(!isConnected) {
+		await client.connect();
+		isConnected = true;
+		console.log("Connexion à MongoDB réussie !")
+	}
 }
 
 async function getAllMessages(dbName, collectionName) {
-    try {
+	try {
 
-        connectDB();
+		await connectDB();
 
-        query = {}
-        projection = {}
+		const query = {}
+		const projection = {}
 
-        const listMessages = client
-                                .db(dbName)
-                                .collection(collectionName)
-                                .find(query, projection);
+		const listMessages = client
+								.db(dbName)
+								.collection(collectionName)
+								.find(query, projection);
 
-        return await listMessages.toArray();
+		return await listMessages.toArray();
 
-    } catch (e) {
-        console.error("Erreur lors de la récupération des messages :", e);
-        throw e;
-    } 
+	} catch (e) {
+		console.error("Erreur lors de la récupération des messages :", e);
+		throw e;
+	} 
 }
 
 async function getAllUsers(dbName, collectionName) {
-    try {
-        connectDB();
+	try {
+		await connectDB();
 
-        query = {}
-        projection = {}
+		const query = {}
+		const projection = {}
 
-        const listMessages = client
-                                .db(dbName)
-                                .collection(collectionName)
-                                .find(query, projection);
+		const listMessages = client
+								.db(dbName)
+								.collection(collectionName)
+								.find(query, projection);
 
-        return await listMessages.toArray();
+		return await listMessages.toArray();
 
-    } catch (e) {
-        console.error("Erreur lors de la récupération des messages :", e);
-        throw e;
-    }
+	} catch (e) {
+		console.error("Erreur lors de la récupération des messages :", e);
+		throw e;
+	}
 }
 
 
 async function getUser(dbName, collectionName, prenomReq, nomReq) {
-    try {
-        connectDB();
+	try {
+		await connectDB();
 
-        query = {
-            prenom: prenomReq,
-            nom: nomReq
-        }
+		const query = {
+			prenom: prenomReq,
+			nom: nomReq
+		}
 
-        projection = {}
+		const projection = {}
 
-        const user = client
-                        .db(dbName)
-                        .collection(collectionName)
-                        .find(query, projection);
+		const user = client
+						.db(dbName)
+						.collection(collectionName)
+						.findOne(query, projection);
 
-        return await user.toArray();
+		return await user.toArray();
 
-    } catch (e) {
-        console.error("Erreur lors de la récupération de l'user :", e);
-        throw e;
-    }
+	} catch (e) {
+		console.error("Erreur lors de la récupération de l'user :", e);
+		throw e;
+	}
 }
 
 
 
 async function insertUser(dbName, collectionName, userData) {
-    try {
-        connectDB();
+	try {
+		await connectDB();
 
-        userData.createdAt = new Date();
+		userData.createdAt = new Date();
 
-        const result = client
-                        .db(dbName)
-                        .collection(collectionName)
-                        .insertOne(userData);
+		const result = await client
+						.db(dbName)
+						.collection(collectionName)
+						.insertOne(userData);
 
-        return result;
+		return result;
 
-    } catch (e) {
-        console.error("Erreur lors de l'insertion de l'utilisateur : ", e);
-        throw e;
-    }
+	} catch (e) {
+		console.error("Erreur lors de l'insertion de l'utilisateur : ", e);
+		throw e;
+	}
 }
 
 async function getUserByLogin(dbName, collectionName, loginReq) {
-    try {
-        connectDB();
+	try {
+		await connectDB();
 
-        query = {
-            login: loginReq
-        }
+		const query = {
+			login: loginReq
+		}
 
-        projection = {}
+		const projection = {}
 
-        const user = client
-                        .db(dbName)
-                        .collection(collectionName)
-                        .find(query, projection);
+		const user = client
+						.db(dbName)
+						.collection(collectionName)
+						.findOne(query, projection);
 
-        return await user.toArray();
+		return await user.toArray();
 
 
-    } catch (e) {
-        console.error("Erreur lors de l'insertion de l'utilisateur : ", e);
-        throw e;
-    }
+	} catch (e) {
+		console.error("Erreur lors de l'insertion de l'utilisateur : ", e);
+		throw e;
+	}
 }
 
 
 
 module.exports = { 
-    getAllMessages, 
-    getAllUsers, 
-    getUser, 
-    insertUser, 
-    getUserByLogin
+	getAllMessages, 
+	getAllUsers, 
+	getUser, 
+	insertUser, 
+	getUserByLogin
 };
+*/
