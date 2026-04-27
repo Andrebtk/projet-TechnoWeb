@@ -4,11 +4,33 @@
 
 
 1. DÉMARRER MONGODB :
+    - S'assurer que le service MongoDB est lancé :
+      $> sudo service mongod start (sur Linux)
+    - Ou ouvrir MongoDB Compass pour vérifier la connexion
 
 
-2. DÉMARRER LE SERVEUR :
-    Aller dans server : cd /server
-    lancer $> npm start
+2. INSTALLATION DES DÉPENDANCES (Première fois) :
+    - Aller dans le dossier serveur : cd server
+    - Lancer $> npm install
+    - Principaux modules installés :
+        - express
+        - mongodb 
+        - express-session 
+        - cors 
+
+3. DÉMARRER LE SERVEUR :
+    - Dans le dossier serveur, lancer :
+        $> npm start
+    - Le serveur écoute sur le port : 3001
+
+
 
 3. VÉRIFIER QUE ÇA MARCHE :
    - Aller sur : http://localhost:3001/api/status
+   - Si "Serveur fonctionne bien !" s'affiche, l'API est prête
+
+
+5. TESTS API (Thunder Client (extension VScode) / Postman) :
+    - Utiliser la "routeAPI.txt" pour tester les routes :
+        - POST /api/auth/login (pour ouvrir une session)
+        - GET  /api/messages   (pour voir le forum)
