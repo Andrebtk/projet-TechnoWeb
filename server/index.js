@@ -95,7 +95,7 @@ app.get('/api/messages/search', async (req, res) => {
 })
 
 
-app.delete('/api/message/:id', async (req, res) => {
+app.delete('/api/messages/:id', async (req, res) => {
 	try {
 		if (!req.session.user) {
 			return res.status(401).json({ erreur: "Non connecté" });
