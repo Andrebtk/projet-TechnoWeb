@@ -25,7 +25,7 @@ function Message({ message, isConnected, onRefresh }) {
           headers: {
             "Content-Type": "application/json",
           },
-          // credentials: "include",
+          credentials: "include",
           body: JSON.stringify({ text: commentText }),
         }
       );

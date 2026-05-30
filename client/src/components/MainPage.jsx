@@ -18,7 +18,7 @@ function MainPage() {
   const checkSession = async () => {
     try {
       const response = await fetch(`${API_URL}/api/auth/me`, {
-        //credentials: "include",
+        credentials: "include",
       });
 
       if (response.ok) {
@@ -65,7 +65,7 @@ function MainPage() {
   const handleLogout = async () => {
     try {
       const response = await fetch(`${API_URL}/api/auth/logout`, {
-        //credentials: "include",
+        credentials: "include",
       });
 
       if (response.ok) {
