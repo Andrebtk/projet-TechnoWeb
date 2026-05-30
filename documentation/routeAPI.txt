@@ -4,52 +4,101 @@ DOCUMENTATION API - ORGANIZ'ASSO
 --- STATUT & TESTS ---
 
 GET  /api/status
-    - Vérifie si le serveur répond.
+    - Vérifie si le serveur répond
     - Retour : "Serveur fonctionne bien !"
 
 GET  /
-    - Route racine de test.
+    - Route racine de test
     - Retour : "test"
 
 
 --- MESSAGES ---
 
 GET  /api/messages
-    - Récupère la liste complète des messages du forum.
-    - Retour : [ { message1 }, { message2 }, ... ]
+    - Récupère la liste complète des messages du forum
+    - Retour (200) : Tableau d'objet JSON contenant des message - [ { message1 }, { message2 }, ... ]
+
+GET  /api/messages/search?q=motcle
+    - Recherche des messages contenant un mot-clé précis
+    - Paramètre d'URL : `q` (le mot-clé recherché)
+    - Retour (200) : Tableau d'objet JSON correspondant à la recherche 
+    - Erreur (400) : Si aucun mot-clé fourni 
+
+POST  /api/messages
+    - crée un nouveau message
+    - Authentification requise (Session active)
+    - Body requis (JSON) : `title` (optionnel), `text` (obligatoire)
+    - Retour (201) : { "message": "Message posté !", "id": "..." }
+    - Erreur (400) : Texte manquants 
+    - Erreur (401) : utilisateur non connecté 
+
+
+PUT /api/messages/:id 
+    - Modifie le texte d'un message existant
+    - Authentification requise (Session active)
+    - Paramètre : id (dans l'URL)
+    - Body requis (JSON) : text (le nouveau texte)
+    - Retour (200) : { "message": "Message mis à jour avec succès !" }
+    - Erreur (400) : Texte manquant 
+    - Erreur (401) : utilisateur non connecté
+    - Erreur (403) : L'utilisateur n'est pas l'auteur du messsage 
+    - Erreur (404) : Message introuvable 
+
+DELETE /api/messages/:id 
+    - Suprime un message existant 
+    - Authentification requise (Session active)
+    - Paramètre : id (dans l'URL)
+    - Retour (200) : { "message": "message supprimé avec succès" }
+    - Erreur (401) : utilisateur non connecté 
+    - Erreur (403) : L'utilisateur n'est pas l'auteur du message 
+    - Erreur (404) : Message introuvable
+
+
+--- COMMENTAIRES ---
+POST  /api/messages/:id/comments
+    - Ajoute un commentaire (répones) à un message existant 
+    - Authentification requise (Session active)
+    - Paramètre : id du message parent (dans l'URL)
+    - Body requis (JSON) : text (obligatoire)
+    - Retour (201) : { "message": "Commentaire ajouté avec succès !" }
+    - Erreur (400) : Texte manquant 
+    - Erreur (401) : Utilisateur non connecté 
+    - Erreur (404) : Le message parent n'existe plus
+
 
 
 --- UTILISATEURS (USERS) ---
 
 GET  /api/users
-    - Récupère la liste de tous les utilisateurs inscrits.
-    - Retour : [ { user1 }, { user2 }, ... ]
+    - Récupère la liste de tous les utilisateurs inscrits
+    - Retour (200) : Tableau d'objets JSON des utilisateurs - [ { user1 }, { user2 }, ... ]
 
 GET  /api/user/:prenom/:nom
-    - Recherche un utilisateur par son prénom et son nom.
+    - Recherche un utilisateur par son prénom et son nom
     - Paramètres : prenom, nom (dans l'URL)
-    - Retour : L'objet utilisateur ou Erreur 404 si non trouvé.
+    - Retour (200) : L'objet Utilisateur
+    - Erreur (404) : Utilisateur non trouvé
 
-POST /api/users
-    - Inscrit un nouvel utilisateur en base de données.
-    - Body (JSON) requis : 
-    { 
-        "prenom": "Jean", 
-        "nom": "Dupont",
-        "login": "jdupont",
-        "password": "...",
-        ... 
-    }
-    - Retour : Message de succès (201) ou Erreur 400 si nom/prénom manquants.
+POST  /api/users
+    - Inscrit un nouvel utilisateur en base de données
+    - Body requis (JSON) : prenom et nom (obligatoire), plus les autres infos souhaitées
+    - Retour (201) : { "message": "Utilisateur créé avec succès !" }
+    - Erreur (400) : Prénom ou nom manquants
 
 
---- AUTHENTIFICATION ---
+--- AUTHENTIFICATION & SESSION ---
 
-POST /api/auth/login
-    - Connecte un utilisateur existant.
-    - Body (JSON) requis :
-    {
-        "login": "monLogin",
-        "password": "monPassword"
-    }
-    - Retour : { "response": "OK" } en cas de succès.
+POST  /api/auth/login
+    - Connecte un utilisateur et ouvre une session
+    - Body requis (JSON) : login et password 
+    - Retour (200) : { "message": "Connexion réussie !", "user": { ... } }
+    - Erreur (400) : Identifiants incorrects (login ou mot de passe invalide)
+
+GET  /api/auth/me 
+    - Vérifie si le client actuel possède une session active
+    - Retour (200) : { "connected": true, "user": { ... } }
+    - Erreur (401) : { "connected": false, "message": "Non connecté" }
+
+GET  /api/auth/logout
+    - Déconnecte l'utilisateur et détruit la session/cookie 
+    - Retour (200) : { "message": "Déconnexion réussie" }

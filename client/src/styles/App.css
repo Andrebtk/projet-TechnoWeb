@@ -1,0 +1,191 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f5f7;
+  color: #222;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
+  background: #1f4e79;
+  color: white;
+  font-weight: bold;
+}
+
+button:hover {
+  background: #163a59;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.app {
+  min-height: 100vh;
+}
+
+.header {
+  background: #1f4e79;
+  color: white;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.header h1 {
+  margin: 0;
+}
+
+.header p {
+  margin: 0.4rem 0 0;
+}
+
+.navigation {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: white;
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.navigation-auth {
+  margin-left: auto;
+}
+
+.login-form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.login-form input {
+  width: 140px;
+}
+
+.logout-zone {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.main-content {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.page-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.form,
+.new-message-form,
+.comment-form,
+.search-zone {
+  display: grid;
+  gap: 0.8rem;
+  margin: 1rem 0;
+}
+
+.search-zone {
+  grid-template-columns: 1fr 2fr auto auto;
+  align-items: end;
+}
+
+.new-message-form {
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.message-list {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.message-card {
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.message-card h3 {
+  margin-top: 0;
+}
+
+.message-meta {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.info-message {
+  background: #e8f1fb;
+  border-left: 4px solid #1f4e79;
+  padding: 0.7rem;
+  margin: 1rem 0;
+}
+
+.warning {
+  background: #fff3cd;
+  border-left: 4px solid #f0ad4e;
+  padding: 0.7rem;
+}
+
+.comments {
+  margin-top: 1rem;
+  padding-left: 1rem;
+  border-left: 3px solid #ddd;
+}
+
+.comment {
+  background: #f7f7f7;
+  padding: 0.6rem;
+  border-radius: 6px;
+}
+
+.connected-user {
+  font-weight: bold;
+}
+
+@media (max-width: 800px) {
+  .navigation,
+  .login-form,
+  .logout-zone {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .navigation-auth {
+    margin-left: 0;
+  }
+
+  .search-zone {
+    grid-template-columns: 1fr;
+  }
+
+  .login-form input {
+    width: 100%;
+  }
+}
