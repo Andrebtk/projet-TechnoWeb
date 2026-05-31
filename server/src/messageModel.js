@@ -100,7 +100,7 @@ async function addComment(dbName, collectionName, messageId, commentData) {
 	}
 }
 
-async function searchMessages(dbName, collectionName, keyword) {
+async function searchMessages(dbName, collectionName, filters, userRole) {
 	try {
 		const client = await connectDB();
 		const query = userRole === 'admin' ? {} : { forum_id: { $ne: "forum_ferme" } };

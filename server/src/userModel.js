@@ -103,5 +103,6 @@ module.exports = {
 	getUserByLogin,
 	getUser,
 	getAllUsers,
-	updateUserStatus
+	updateUserStatus,
+	updateUserRole
 }
