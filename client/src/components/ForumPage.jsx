@@ -16,7 +16,7 @@ function ForumPage({ isConnected, currentUser }) {
   const loadMessages = async () => {
     try {
       const response = await fetch(`${API_URL}/api/messages`, {
-        //credentials: "include",
+        credentials: "include",
       });
 
       const data = await response.json();
@@ -42,7 +42,7 @@ function ForumPage({ isConnected, currentUser }) {
       const response = await fetch(
         `${API_URL}/api/messages/search?q=${encodeURIComponent(keyword)}`,
         {
-         // credentials: "include",
+          credentials: "include",
         }
       );
 
@@ -66,7 +66,7 @@ function ForumPage({ isConnected, currentUser }) {
         headers: {
           "Content-Type": "application/json",
         },
-        //credentials: "include",
+        credentials: "include",
         body: JSON.stringify({ title, text }),
       });
 

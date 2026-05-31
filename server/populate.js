@@ -1,22 +1,21 @@
 const { MongoClient } = require('mongodb');
 
 async function testDB(client, dbName, collectionName) {
-    test = {
-        init: true
-    }
+	const test = {
+		init: true
+	}
 
-    const col1 = await client.db(dbName).collection(collectionName);
-    const testInit = await col1.findOne(test);
+	const col1 = await client.db(dbName).collection(collectionName);
+	const testInit = await col1.findOne(test);
 
-    if(testInit) {
-        console.log("trouve");
-    } else {
-        console.log("Non trouver");
-        console.log("Population de la BD");
-        await populate(client, dbName);
+	if(testInit) {
+		console.log("DB possede deja des données");
+	} else {
+		console.log("Population de la BD");
+		await populate(client, dbName);
 
-        await col1.insertOne(test);
-    }
+		await col1.insertOne(test);
+	}
 }
 
 async function populate(client, dbName) {
@@ -210,4 +209,4 @@ async function main() {
 }
 
 
-main().catch(console.error);
+module.exports = main;

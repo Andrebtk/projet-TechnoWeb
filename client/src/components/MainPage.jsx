@@ -43,6 +43,7 @@ function MainPage() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({ login, password }),
       });
 

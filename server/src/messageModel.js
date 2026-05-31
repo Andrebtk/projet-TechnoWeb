@@ -43,9 +43,9 @@ async function insertMessage(dbName, collectionName, messageData) {
 
 async function deleteMessage(dbName, collectionName, messageId) {
 	try {
-		const clien = await connectDB();
+		const client = await connectDB();
 		const result = await client
-								.bd(dbName)
+								.db(dbName)
 								.collection(collectionName)
 								.deleteOne({ _id: new ObjectId(messageId)});
 		return result;
@@ -130,7 +130,7 @@ async function searchMessages(dbName, collectionName, keyword) {
 module.exports = {
 	getAllMessages,
 	insertMessage,
-	insertMessage,
+	deleteMessage,
 	getMessageById,
 	updateMessage,
 	addComment,
