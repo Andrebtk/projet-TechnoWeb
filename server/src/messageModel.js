@@ -1,19 +1,18 @@
 const connectDB = require('./db');
 const { ObjectId } = require('mongodb')
 
-async function getAllMessages(dbName, collectionName) {
+async function getAllMessages(dbName, collectionName, userRole) {
 	try {
 
 		const client = await connectDB();
-		const query = {}
-		const projection = {}
-
-		const listMessages = client
-								.db(dbName)
-								.collection(collectionName)
-								.find(query, projection);
-
-		return await listMessages.toArray();
+		// Si l'user n'est pas admin, il ne voit pas les messages avec forum_id = "forum_ferme"
+		const query = userRole === 'admin' ? {} : { forum_id: { $ne: "forum_ferme" } };
+		
+		return await client.db(dbName)
+						.collection(collectionName)
+						.find(query)
+						.sort({date: -1})
+						.toArray();
 
 	} catch (e) {
 		console.error("Erreur lors de la récupération des messages :", e);
@@ -104,25 +103,41 @@ async function addComment(dbName, collectionName, messageId, commentData) {
 async function searchMessages(dbName, collectionName, keyword) {
 	try {
 		const client = await connectDB();
-		const regex = new RegExp(keyword, 'i');
+		const query = userRole === 'admin' ? {} : { forum_id: { $ne: "forum_ferme" } };
 
-		const result = await client 
-								.db(dbName)
-								.collection(collectionName)
-								.find({
-									$or : [
-										{ title : { $regex: regex} },
-										{ text: { $regex : regex} }
-									]
-								})
-								.sort({date : -1})
-								.toArray();
-		return result;
+		// Recherche par mot-clé (Titre ou Texte)
+		if (filters.keyword) {
+			const regex = new RegExp(filters.keyword, 'i');
+			query.$or = [{ title: { $regex: regex } }, { text: { $regex: regex } }];
+		}
+
+		// Recherche par auteur
+		if (filters.author) {
+			query.author = filters.author;
+		}
+		
+		// Recherche par dates
+		if (filters.startDate || filters.endDate) {
+			query.date = {};
+			if (filters.startDate) query.date.$gte = new Date(filters.startDate);
+			if (filters.endDate) query.date.$lte = new Date(filters.endDate);
+		}
+
+		return await client.db(dbName).collection(collectionName).find(query).sort({date: -1}).toArray();
 	}
 	catch (e) {
 		console.error("Erreur lors de la recherche :", e);
 		throw e;
 	}
+}
+
+async function getMessagesByUser(dbName, collectionName, login) {
+	const client = await connectDB();
+	return await client.db(dbName)
+						.collection(collectionName)
+						.find({ author: login })
+						.sort({date: -1})
+						.toArray();
 }
 
 
@@ -134,5 +149,6 @@ module.exports = {
 	getMessageById,
 	updateMessage,
 	addComment,
-	searchMessages
+	searchMessages,
+	getMessagesByUser
 }

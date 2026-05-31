@@ -2,22 +2,21 @@ const connectDB = require('./db');
 
 
 async function insertUser(dbName, collectionName, userData) {
-	try {
-		const client = await connectDB();
+	const client = await connectDB();
+	userData.createdAt = new Date();
+	userData.isActive = false; 
+	userData.role = "user";
 
-		userData.createdAt = new Date();
+	return await client.db(dbName).collection(collectionName).insertOne(userData);
+}
 
-		const result = await client
-						.db(dbName)
-						.collection(collectionName)
-						.insertOne(userData);
 
-		return result;
-
-	} catch (e) {
-		console.error("Erreur lors de l'insertion de l'utilisateur : ", e);
-		throw e;
-	}
+async function updateUserStatus(dbName, collectionName, userId, isActive, role) {
+	const client = await connectDB();
+	return await client.db(dbName).collection(collectionName).updateOne(
+		{ _id: new ObjectId(userId) },
+		{ $set: { isActive: isActive, role: role } }
+	);
 }
 
 
@@ -89,9 +88,20 @@ async function getAllUsers(dbName, collectionName) {
 	}
 }
 
+
+async function updateUserRole(dbName, collectionName, userId, newRole) {
+	const client = await connectDB();
+	return await client.db(dbName).collection(collectionName).updateOne(
+		{ _id: new ObjectId(userId) },
+		{ $set: { role: newRole } } 
+	);
+}
+
+
 module.exports = {
 	insertUser,
 	getUserByLogin,
 	getUser,
-	getAllUsers
+	getAllUsers,
+	updateUserStatus
 }

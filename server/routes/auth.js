@@ -7,34 +7,30 @@ const NOMDB = "projetDB";
 // POST /api/auth/login
 router.post('/login', async (req, res) => {
 	try {
-		const login = req.body.login;
-		const password = req.body.password;
-
-		// Test si le login existe  
+		const { login, password } = req.body;
 		const user = await userModel.getUserByLogin(NOMDB, "users", login);
 
-		if(!user) {
+		if(!user || user.password !== password) {
 			return res.status(400).json({ erreur : "Identifiants incorrects" });
 		}
 		
-		// Test si le login + password est bon
-		if(user.password !== password) {
-			return res.status(400).json({ erreur : "Identifiants incorrects" });
+		// Ajout : Vérification du statut actif
+		if(user.isActive === false) {
+			return res.status(403).json({ erreur : "Votre compte est en attente de validation par un administrateur." });
 		}
 
-		// Création de la session
+		// Ajout : Sauvegarde du rôle
 		req.session.user = {
 			id: user._id,
 			login: user.login,
 			prenom: user.prenom,
-			nom: user.nom
+			nom: user.nom,
+			role: user.role || "user" 
 		};
 
 		res.json({ message: "Connexion réussie !", user: req.session.user });
-
 	} catch (error) {
-		console.error("Erreur lors de la l'authentification :", error);
-		res.status(500).json({ erreur: "Erreur lors de la l'authentification" });
+		res.status(500).json({ erreur: "Erreur lors de l'authentification" });
 	}
 });
 
