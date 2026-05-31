@@ -6,7 +6,11 @@ const session = require('express-session')
 const userModel = require('./src/userModel');
 const messageModel = require('./src/messageModel');
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173', // URL de ton frontend Vite/React
+    credentials: true                // Autorise l'envoi du cookie de session
+}));
+
 app.use(express.json());
 
 const PORT = 3001;
