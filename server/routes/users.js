@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userModel = require('../src/userModel');
+const messageModel = require('../src/messageModel');
 
 const NOMDB = "projetDB";
 

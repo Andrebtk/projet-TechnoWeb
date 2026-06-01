@@ -31,19 +31,28 @@ app.use(cors({
 app.use(express.json());
 
 
-io.on("connection", (socket) => {
-	console.log("Un utilisateur s'est connecté via WebSocket :", socket.id);
+io.on('connection', (socket) => {
+    console.log('Un utilisateur est connecté aux WebSockets');
 
-	socket.on("nouveau_message", (data) => {
-		console.log("Message reçu :", data);
-
-		io.emit("reception_message", data);
+	socket.on('join_chat', (userData) => {
+		socket.join('room_public'); 
+		
+		if (userData && userData.role === 'admin') {
+			socket.join('room_admin');
+			console.log('Un Admin a rejoint la salle privée');
+		}
 	});
 
-	socket.on("disconnect", () => {
-		console.log("Utilisateur déconnecté :", socket.id)
-	})
-})
+	socket.on('nouveau_message', (data) => {
+		const targetRoom = data.room === 'admin' ? 'room_admin' : 'room_public';
+		
+		io.to(targetRoom).emit('reception_message', data);
+	});
+
+	socket.on('disconnect', () => {
+		console.log('Un utilisateur s\'est déconnecté');
+	});
+});
 
 const PORT = 3001;
 const NOMDB = "projetDB"

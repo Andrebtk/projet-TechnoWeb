@@ -5,54 +5,81 @@ const messageModel = require('../src/messageModel');
 const NOMDB = "projetDB";
 
 // GET /api/messages
+// GET /api/messages
 router.get('/', async (req, res) => {
 	try {
-		const messages = await messageModel.getAllMessages(NOMDB, "messages");
+		// 1. On vérifie le rôle de la personne connectée (si non connecté, c'est un 'user' par défaut)
+		const userRole = req.session.user ? req.session.user.role : 'user';
+
+		// 2. On passe ce rôle à la fonction du modèle !
+		// (Vérifie bien que le nom de ta BDD correspond à ta constante, ex: NOMDB ou autre)
+		const messages = await messageModel.getAllMessages(NOMDB, "messages", userRole);
+		
 		res.json(messages);
-	} catch (error) {
-		res.status(500).json({ erreur: "Impossible de récupérer les messages" });
+	} catch (e) {
+		console.error(e);
+		res.status(500).json({ erreur: "Erreur lors de la récupération des messages" });
 	}
-})
+});
 
 // POST /api/messages
 router.post('/', async (req, res) => {
 	try {
 		if(!req.session.user) {
-			return res.status(401).json({erreur: "Vous devez être connecté pour poster." });
+			return res.status(401).json({erreur: "Non connecté"});
 		}
 
-		const {title, text} = req.body;
-
-		if (!text) {
-			return res.status(400).json({ erreur: "Le contenu du message est obligatoire." });
+		const { title, text, forum_id } = req.body;
+		
+		if(!text) {
+			return res.status(400).json({erreur: "Le texte est obligatoire"});
 		}
 
+		// Sécurité : Par défaut, c'est ouvert. 
+		// Si c'est un admin qui demande le forum fermé, on valide le forum fermé.
+		let targetForum = "forum_ouvert";
+		if (req.session.user.role === 'admin' && forum_id === "forum_ferme") {
+			targetForum = "forum_ferme";
+		}
+
+		// On crée l'objet du nouveau message
 		const newMessage = {
-			title: title || "Sans titre",
+			title: title || "",
 			text: text,
 			author: req.session.user.login,
-			authorPrenom: req.session.user.prenom
-		}
+			authorPrenom: req.session.user.prenom,
+			date: new Date(),
+			comments: [],
+			forum_id: targetForum
+		};
 
+		// CORRECTION : On utilise bien insertMessage ici !
 		const result = await messageModel.insertMessage(NOMDB, "messages", newMessage);
+		
 		res.status(201).json({ message: "Message posté !", id: result.insertedId });
-
 	} catch (e) {
-		console.error("Erreur lors de la création du message :", e);
-		res.status(500).json({ erreur: "Impossible de poster le message" });
+		console.error(e);
+		res.status(500).json({ erreur: "Erreur lors de la création" });
 	}
 });
 
 // GET /api/messages/search
 router.get('/search', async (req, res) => {
 	try {
-		const keyword = req.query.q;
+		const userRole = req.session.user ? req.session.user.role : 'user';
+		
+		const filters = {
+			keyword: req.query.q,
+			author: req.query.author,
+			startDate: req.query.startDate,
+			endDate: req.query.endDate
+		};
 
-		if(!keyword) {
-			return res.status(400).json({erreur: "Veuillez fournir un mot-clé de recherche"});
+		if(!filters.keyword && !filters.author && !filters.startDate && !filters.endDate) {
+			return res.status(400).json({erreur: "Veuillez fournir au moins un critère de recherche"});
 		}
 
-		const messages = await messageModel.searchMessages(NOMDB, "messages", keyword);
+		const messages = await messageModel.searchMessages(NOMDB, "messages", filters, userRole);
 		res.json(messages);
 	} catch (e) {
 		console.error(e);
@@ -95,7 +122,7 @@ router.put('/:id', async (req, res) => {
 		}
 
 		const messageId = req.params.id;
-		const {text} = req.body;
+		const {title, text} = req.body;
 		
 		if(!text) {
 			return res.status(400).json({erreur: "Le nouveau texte est obligatoire"});
@@ -111,7 +138,10 @@ router.put('/:id', async (req, res) => {
 			return res.status(403).json({ erreur: "Tu n'as pas le droit de modifier ce message !" });
 		}
 
-		await messageModel.updateMessage(NOMDB, "messages", messageId, text);
+		// On garde l'ancien titre si le nouveau est vide
+		const finalTitle = title !== undefined ? title : message.title;
+
+		await messageModel.updateMessage(NOMDB, "messages", messageId, finalTitle, text);
 		res.json({ message: "Message mis à jour avec succès !" });
 	} catch (e) {
 		console.error(e);

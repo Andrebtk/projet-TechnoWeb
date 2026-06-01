@@ -61,16 +61,16 @@ async function getMessageById(dbName, collecitonName, messageId) {
 	return await client.db(dbName).collection(collecitonName).findOne({_id : new ObjectId(messageId)});
 }
 
-async function updateMessage(dbName, collectionName, messageId, newText) {
+async function updateMessage(dbName, collectionName, messageId, newTitle, newText) {
 	try {
 		const client = await connectDB();
 		const result = await client
-								.db(dbName)
-								.collection(collectionName)
-								.updateOne(
-									{ _id: new ObjectId(messageId) },
-									{ $set : { text: newText } }
-								);
+			.db(dbName)
+			.collection(collectionName)
+			.updateOne(
+				{ _id: new ObjectId(messageId) },
+				{ $set : { title: newTitle, text: newText, isEdited: true } }
+			);
 		return result;
 	}
 	catch (e) {
@@ -103,6 +103,8 @@ async function addComment(dbName, collectionName, messageId, commentData) {
 async function searchMessages(dbName, collectionName, filters, userRole) {
 	try {
 		const client = await connectDB();
+		
+		// On gère l'accès au forum fermé
 		const query = userRole === 'admin' ? {} : { forum_id: { $ne: "forum_ferme" } };
 
 		// Recherche par mot-clé (Titre ou Texte)
@@ -111,7 +113,7 @@ async function searchMessages(dbName, collectionName, filters, userRole) {
 			query.$or = [{ title: { $regex: regex } }, { text: { $regex: regex } }];
 		}
 
-		// Recherche par auteur
+		// Recherche par auteur (login)
 		if (filters.author) {
 			query.author = filters.author;
 		}
@@ -120,10 +122,15 @@ async function searchMessages(dbName, collectionName, filters, userRole) {
 		if (filters.startDate || filters.endDate) {
 			query.date = {};
 			if (filters.startDate) query.date.$gte = new Date(filters.startDate);
-			if (filters.endDate) query.date.$lte = new Date(filters.endDate);
+			// On ajoute 23h59 à la date de fin pour inclure toute la journée
+			if (filters.endDate) query.date.$lte = new Date(filters.endDate + "T23:59:59Z"); 
 		}
 
-		return await client.db(dbName).collection(collectionName).find(query).sort({date: -1}).toArray();
+		return await client.db(dbName)
+							.collection(collectionName)
+							.find(query)
+							.sort({date: -1})
+							.toArray();
 	}
 	catch (e) {
 		console.error("Erreur lors de la recherche :", e);
