@@ -1,0 +1,53 @@
+======================================================
+RAPPORT DE PROJET : BILAN ET PERSPECTIVES
+======================================================
+
+1. Répartition du travail
+------------------------------------------------------
+Afin de travailler de manière efficace, nous avons opté pour une répartition claire des responsabilités : l'un s'est concentré sur le développement du Backend (API et base de données), tandis que l'autre a piloté la conception du Frontend (interface React). Néanmoins, cette séparation est restée flexible : en tant que responsable Backend, je suis également intervenu activement sur le Frontend pour soutenir le développement de l'interface et finaliser les fonctionnalités clés.
+
+
+* André Bertok : 
+    - Mise en place et configuration complète de la base de données MongoDB.
+    - Développement du Backend (Node.js / Express) : création des routes API pour l'authentification (/auth), la gestion des utilisateurs (/users), et le système de messages/commentaires (/messages).
+    - Intégration et sécurisation des sessions utilisateurs au niveau du serveur.
+    - Soutien actif au développement de l'interface React pour garantir la cohérence client-serveur et finaliser l'intégration des fonctionnalités clés et des WebSockets.
+
+* ...
+
+
+
+2. Problèmes rencontrés et solutions
+------------------------------------------------------
+Au cours du développement, nous avons été confrontés à trois défis majeurs :
+
+* La synchronisation du contexte utilisateur (React / Backend) :
+  - Problème : Lors de la récupération d'un compte ou de la connexion, certaines données spécifiques (comme l'âge) n'apparaissaient pas directement côté client.
+  - Solution : Nous avons corrigé les filtres des objets de session dans les routes du Backend pour transmettre l'intégralité des champs nécessaires (user.age) et forcé une reconnexion pour rafraîchir le cookie.
+
+* Gestion des requêtes HTTP hors navigateur :
+  - Problème : Lors des tests de l'API avec des requêtes cURL, l'état de connexion était perdu d'une commande à l'autre (Erreurs 401 Unauthorized).
+  - Solution : Utilisation d'un fichier de gestion des cookies (-c cookies.txt et -b cookies.txt) pour simuler parfaitement le comportement d'un navigateur.
+
+* Limitations matérielles (WebGL) :
+  - Problème : Nous voulions intégrer des bonus d'animations 3D avec Three.js, mais l'absence d'accélération matérielle sur nos machines de développement (contexte WebGL bloqué) provoquait des crashs de rendu.
+  - Solution : Nous avons choisi de retirer ce module pour garantir la stabilité et la portabilité totale de l'application.
+
+
+3. Ce qu'il reste à faire
+------------------------------------------------------
+Bien que l'application soit 100% fonctionnelle et respecte l'ensemble du cahier des charges du TD1 (création, réponse, administration, temps réel), nous aurions aimé pousser le projet plus loin :
+
+* Sécurisation avancée des mots de passe : 
+    Les mots de passe sont actuellement stockés en texte brut dans la base de données de test. L'intégration d'un outil de hachage comme bcrypt serait la prochaine étape logique.
+
+
+4. Choix de modélisation
+------------------------------------------------------
+Notre modélisation respecte globalement les principes NoSQL enseignés, mais nous avons fait un choix d'optimisation spécifique pour la collection "messages" :
+
+* Embarquement des commentaires : 
+    Au lieu de créer une collection séparée pour les commentaires (ce qui aurait nécessité des jointures complexes et lourdes), nous avons choisi d'inclure les commentaires directement sous forme de tableau de sous-documents au sein de chaque message.
+
+* Pourquoi ce choix ? 
+    Dans un forum, un commentaire n'existe jamais sans son message parent. Les stocker ensemble permet de récupérer un message et l'intégralité de ses réponses en une seule et unique requête à la base de données, ce qui améliore grandement les performances de l'application et la fluidité de l'interface React.

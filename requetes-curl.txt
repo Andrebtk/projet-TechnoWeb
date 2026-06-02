@@ -1,0 +1,49 @@
+# 1. INSCRIPTION (Création d'un nouvel utilisateur avec l'âge)
+curl -X POST http://localhost:3001/api/users \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prenom": "Thomas",
+    "nom": "Test",
+    "login": "thomas",
+    "password": "password123",
+    "email": "thomas.test@example.com",
+    "age": 22
+  }
+
+
+# 2. CONNEXION (Login de l'admin Alice et sauvegarde de la session dans cookies.txt)
+# L'option -c (cookie-jar) permet de stocker la session.
+curl -X POST http://localhost:3001/api/auth/login \
+  -H "Content-Type: application/json" \
+  -c cookies.txt \
+  -d '{
+    "login": "alice",
+    "password": "password123"
+  }'
+
+# 3. RÉCUPÉRATION DES UTILISATEURS
+# L'option -b (cookie) renvoie la session pour prouver qu'on est connecté.
+curl -X GET http://localhost:3001/api/users \
+  -b cookies.txt
+
+
+# 4. CRÉATION D'UN MESSAGE SUR LE FORUM PUBLIC
+curl -X POST http://localhost:3001/api/messages \
+  -H "Content-Type: application/json" \
+  -b cookies.txt \
+  -d '{
+    "title": "Test de création via cURL",
+    "text": "Ceci est un message envoyé directement à l API via le terminal, en utilisant le cookie de session !",
+    "forum_id": "forum_ouvert"
+  }'
+
+
+
+# 5. RECHERCHE AVANCÉE (Par mot clé)
+curl -X GET "http://localhost:3001/api/messages/search?q=cURL" \
+  -b cookies.txt
+
+
+# 6. DÉCONNEXION
+curl -X GET http://localhost:3001/api/auth/logout \
+  -b cookies.txt

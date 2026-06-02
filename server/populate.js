@@ -140,7 +140,7 @@ async function testDB(client, dbName, collectionName) {
 
 	try {
 		await client.connect();
-		await testDB(client, "projetDB", "testing");
+		await testDB(client, "AndreBertok_DB", "testing");
 
 	} catch(e) {
 		console.log(e);

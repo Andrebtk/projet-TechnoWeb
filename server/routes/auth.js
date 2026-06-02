@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userModel = require('../src/userModel');
 
-const NOMDB = "projetDB";
+const NOMDB = "AndreBertok_DB";
 
 // POST /api/auth/login
 router.post('/login', async (req, res) => {

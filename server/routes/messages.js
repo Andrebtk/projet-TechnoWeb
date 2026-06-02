@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const messageModel = require('../src/messageModel');
 
-const NOMDB = "projetDB";
+const NOMDB = "AndreBertok_DB";
 
 // GET /api/messages
 router.get('/', async (req, res) => {

@@ -55,7 +55,7 @@ io.on('connection', (socket) => {
 });
 
 const PORT = 3001;
-const NOMDB = "projetDB"
+const NOMDB = "AndreBertok_DB"
 
 
 
