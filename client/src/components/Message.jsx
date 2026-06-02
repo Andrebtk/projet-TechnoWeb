@@ -88,7 +88,7 @@ function Message({ message, isConnected, currentUser, onRefresh, onAuthorClick }
 		{/* Mode édition */}
 		{isEditing ? (
 			<div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "10px" }}>
-			{/* NOUVEAU : Champ input pour le titre */}
+
 			<input 
 				type="text" 
 				value={editTitle} 
@@ -103,18 +103,16 @@ function Message({ message, isConnected, currentUser, onRefresh, onAuthorClick }
 			</div>
 			</div>
 		) : (
-			/* Mode affichage classique */
 			<>
-			<h3>
-				{message.title || "Sans titre"}
-				{/* NOUVEAU : La mention (Modifié) stylisée */}
-				{message.isEdited && (
-					<span style={{ fontSize: "0.75rem", color: "#888", fontStyle: "italic", marginLeft: "10px", fontWeight: "normal" }}>
-						(Modifié)
-					</span>
-				)}
-			</h3>
-			<p>{message.text || message.content}</p>
+				<h3>
+					{message.title || "Sans titre"}
+					{message.isEdited && (
+						<span style={{ fontSize: "0.75rem", color: "#888", fontStyle: "italic", marginLeft: "10px", fontWeight: "normal" }}>
+							(Modifié)
+						</span>
+					)}
+				</h3>
+				<p>{message.text || message.content}</p>
 			</>
 		)}
 

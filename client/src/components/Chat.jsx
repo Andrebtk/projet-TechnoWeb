@@ -18,41 +18,41 @@ function Chat({ currentUser }) {
 	const [activeTab, setActiveTab] = useState("public"); 
 
 	useEffect(() => {
-	socket.connect();
+		socket.connect();
 
-	// On dit au serveur qui on est pour rejoindre les bonnes Rooms
-	socket.emit('join_chat', { role: currentUser.role });
 
-	// Écoute des messages entrants
-	socket.on("reception_message", (messageData) => {
-		if (messageData.room === 'admin') {
-		setAdminMessages((prev) => [...prev, messageData]);
-		} else {
-		setPublicMessages((prev) => [...prev, messageData]);
-		}
-	});
+		socket.emit('join_chat', { role: currentUser.role });
 
-	return () => {
-		socket.off("reception_message");
-		socket.disconnect();
-	};
+		// Écoute des messages entrants
+		socket.on("reception_message", (messageData) => {
+			if (messageData.room === 'admin') {
+				setAdminMessages((prev) => [...prev, messageData]);
+			} else {
+				setPublicMessages((prev) => [...prev, messageData]);
+			}
+		});
+
+		return () => {
+			socket.off("reception_message");
+			socket.disconnect();
+		};
 	}, [currentUser]);
 
 	const handleSendMessage = (e) => {
-	e.preventDefault();
-	if (!currentText.trim()) return;
+		e.preventDefault();
+		if (!currentText.trim()) return;
 
-	// On prépare le message en précisant la Room (publique ou admin)
-	const messageData = {
-		author: currentUser.login,
-		text: currentText,
-		time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-		room: activeTab 
-	};
+		// On prépare le message en précisant la Room (publique ou admin)
+		const messageData = {
+			author: currentUser.login,
+			text: currentText,
+			time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+			room: activeTab 
+		};
 
-	// On l'envoie au serveur
-	socket.emit("nouveau_message", messageData);
-	setCurrentText("");
+		// On l'envoie au serveur
+		socket.emit("nouveau_message", messageData);
+		setCurrentText("");
 	};
 
 	const chatContainerStyle = {
@@ -75,7 +75,7 @@ function Chat({ currentUser }) {
 	return (
 		<div style={{ position: "fixed", bottom: "20px", right: "20px", zIndex: 1000 }}>
 		<button onClick={() => setIsOpen(true)} style={{ borderRadius: "50px", padding: "15px 20px", boxShadow: "0 4px 10px rgba(0,0,0,0.2)", fontSize: "1.1em" }}>
-			💬 Chats
+			Chats
 		</button>
 		</div>
 	);
@@ -85,7 +85,7 @@ function Chat({ currentUser }) {
 	<div style={chatContainerStyle}>
 		{/* En-tête cliquable pour fermer */}
 		<div style={headerStyle} onClick={() => setIsOpen(false)}>
-		<span>{activeTab === 'admin' ? '🔒 Chat Admin' : '💬 Chat Public'}</span>
+		<span>{activeTab === 'admin' ? 'Chat Admin' : 'Chat Public'}</span>
 		<span>▼</span>
 		</div>
 
@@ -100,7 +100,7 @@ function Chat({ currentUser }) {
 			<button 
 				onClick={() => setActiveTab('admin')} 
 				style={{ flex: 1, padding: "8px", background: activeTab === 'admin' ? "white" : "transparent", color: "#d9534f", borderRadius: 0, fontWeight: activeTab === 'admin' ? "bold" : "normal" }}>
-				🔒 Admin
+				Admin
 			</button>
 		</div>
 		)}

@@ -36,8 +36,8 @@ function NewMessageForm({ onSubmitMessage, currentUser }) {
 				onChange={(e) => setForumId(e.target.value)}
 				style={{ padding: "0.6rem", borderRadius: "6px", border: "1px solid #ccc", marginBottom: "10px", background: "#fff3cd" }}
 				>
-				<option value="forum_ouvert">📢 Forum Ouvert (Visible par tous les membres)</option>
-				<option value="forum_ferme">🔒 Forum Fermé (Réservé aux Administrateurs)</option>
+				<option value="forum_ouvert">Forum Ouvert (Visible par tous les membres)</option>
+				<option value="forum_ferme">Forum Fermé (Réservé aux Administrateurs)</option>
 				</select>
 			</>
 			)}

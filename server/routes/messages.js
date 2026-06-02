@@ -7,11 +7,9 @@ const NOMDB = "AndreBertok_DB";
 // GET /api/messages
 router.get('/', async (req, res) => {
 	try {
-		// 1. On vérifie le rôle de la personne connectée (si non connecté, c'est un 'user' par défaut)
+		// On vérifie le rôle de la personne connectée
 		const userRole = req.session.user ? req.session.user.role : 'user';
 
-		// 2. On passe ce rôle à la fonction du modèle !
-		// (Vérifie bien que le nom de ta BDD correspond à ta constante, ex: NOMDB ou autre)
 		const messages = await messageModel.getAllMessages(NOMDB, "messages", userRole);
 		
 		res.json(messages);
@@ -34,14 +32,12 @@ router.post('/', async (req, res) => {
 			return res.status(400).json({erreur: "Le texte est obligatoire"});
 		}
 
-		// Sécurité : Par défaut, c'est ouvert. 
-		// Si c'est un admin qui demande le forum fermé, on valide le forum fermé.
 		let targetForum = "forum_ouvert";
 		if (req.session.user.role === 'admin' && forum_id === "forum_ferme") {
 			targetForum = "forum_ferme";
 		}
 
-		// On crée l'objet du nouveau message
+
 		const newMessage = {
 			title: title || "",
 			text: text,
@@ -52,7 +48,6 @@ router.post('/', async (req, res) => {
 			forum_id: targetForum
 		};
 
-		// CORRECTION : On utilise bien insertMessage ici !
 		const result = await messageModel.insertMessage(NOMDB, "messages", newMessage);
 		
 		res.status(201).json({ message: "Message posté !", id: result.insertedId });
@@ -136,8 +131,7 @@ router.put('/:id', async (req, res) => {
 		if(message.author !== req.session.user.login) {
 			return res.status(403).json({ erreur: "Tu n'as pas le droit de modifier ce message !" });
 		}
-
-		// On garde l'ancien titre si le nouveau est vide
+		
 		const finalTitle = title !== undefined ? title : message.title;
 
 		await messageModel.updateMessage(NOMDB, "messages", messageId, finalTitle, text);

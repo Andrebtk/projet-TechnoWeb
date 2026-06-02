@@ -9,8 +9,8 @@ function PublicProfile({ login, isConnected, currentUser, onBack }) {
 	const [info, setInfo] = useState("");
 
 	useEffect(() => {
-	loadUserProfile();
-	loadUserMessages();
+		loadUserProfile();
+		loadUserMessages();
 	}, [login]);
 
 	const loadUserProfile = async () => {
@@ -18,15 +18,15 @@ function PublicProfile({ login, isConnected, currentUser, onBack }) {
 
 		const response = await fetch(`${API_URL}/api/users`, { credentials: "include" });
 		if (response.ok) {
-		const allUsers = await response.json();
+			const allUsers = await response.json();
 
-		const foundUser = allUsers.find(u => u.login === login);
-		
-		if (foundUser) {
-			setUserProfile(foundUser);
-		} else {
-			setUserProfile({ prenom: "Utilisateur", nom: "Inconnu", role: "user" });
-		}
+			const foundUser = allUsers.find(u => u.login === login);
+			
+			if (foundUser) {
+				setUserProfile(foundUser);
+			} else {
+				setUserProfile({ prenom: "Utilisateur", nom: "Inconnu", role: "user" });
+			}
 		}
 	} catch (error) {
 		console.error("Impossible de charger les infos de l'utilisateur");
@@ -34,12 +34,12 @@ function PublicProfile({ login, isConnected, currentUser, onBack }) {
 	};
 
 	const loadUserMessages = async () => {
-	try {
-		const response = await fetch(`${API_URL}/api/users/${login}/messages`, { credentials: "include" });
-		const data = await response.json();
-		if (response.ok) { setMessages(data); setInfo(""); }
-		else setInfo(data.message || "Erreur lors du chargement du profil.");
-	} catch (error) { setInfo("Impossible de charger les messages."); }
+		try {
+			const response = await fetch(`${API_URL}/api/users/${login}/messages`, { credentials: "include" });
+			const data = await response.json();
+			if (response.ok) { setMessages(data); setInfo(""); }
+			else setInfo(data.message || "Erreur lors du chargement du profil.");
+		} catch (error) { setInfo("Impossible de charger les messages."); }
 	};
 
 	return (

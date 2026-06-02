@@ -76,7 +76,7 @@ function AdminPanel({ currentUser }) {
 		{users.map((user) => (
 			<div key={user._id} className="message-card">
 			<h3>{user.prenom} {user.nom} ({user.login})</h3>
-			<p className="message-meta">Statut : {user.isActive ? "🟢 Actif" : "🔴 En attente"} | Rôle : {user.role}</p>
+			<p className="message-meta">Statut : {user.isActive ? "Actif" : "En attente"} | Rôle : {user.role}</p>
 			
 			<div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
 				{!user.isActive && (

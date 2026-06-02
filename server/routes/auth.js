@@ -14,12 +14,10 @@ router.post('/login', async (req, res) => {
 			return res.status(400).json({ erreur : "Identifiants incorrects" });
 		}
 		
-		// Ajout : Vérification du statut actif
 		if(user.isActive === false) {
 			return res.status(403).json({ erreur : "Votre compte est en attente de validation par un administrateur." });
 		}
 
-		// Ajout : Sauvegarde du rôle
 		req.session.user = {
 			id: user._id,
 			login: user.login,

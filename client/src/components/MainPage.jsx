@@ -87,8 +87,8 @@ function MainPage() {
 	};
 
 	const handleSigninSuccess = () => {
-	setMessage("Compte créé. Vous pouvez maintenant vous connecter.");
-	setPage("forum_page");
+		setMessage("Compte créé. Vous pouvez maintenant vous connecter.");
+		setPage("forum_page");
 	};
 
 	return (

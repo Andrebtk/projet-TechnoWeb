@@ -104,7 +104,6 @@ async function searchMessages(dbName, collectionName, filters, userRole) {
 	try {
 		const client = await connectDB();
 		
-		// On gère l'accès au forum fermé
 		const query = userRole === 'admin' ? {} : { forum_id: { $ne: "forum_ferme" } };
 
 		// Recherche par mot-clé (Titre ou Texte)
@@ -113,7 +112,7 @@ async function searchMessages(dbName, collectionName, filters, userRole) {
 			query.$or = [{ title: { $regex: regex } }, { text: { $regex: regex } }];
 		}
 
-		// Recherche par auteur (login)
+		// Recherche par auteur
 		if (filters.author) {
 			query.author = filters.author;
 		}

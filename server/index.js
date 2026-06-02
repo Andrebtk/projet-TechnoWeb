@@ -18,21 +18,22 @@ const io = new Server(server, {
 	}
 })
 
+
 // Importation des routeurs
 const messageRoutes = require('./routes/messages');
 const userRoutes = require('./routes/users');
 const authRoutes = require('./routes/auth');
 
 app.use(cors({
-    origin: 'http://localhost:5173', // URL de ton frontend Vite/React
-    credentials: true                // Autorise l'envoi du cookie de session
+	origin: 'http://localhost:5173', 	// URL de ton frontend Vite/React
+	credentials: true					// Autorise l'envoi du cookie de session
 }));
 
 app.use(express.json());
 
 
 io.on('connection', (socket) => {
-    console.log('Un utilisateur est connecté aux WebSockets');
+	console.log('Un utilisateur est connecté aux WebSockets');
 
 	socket.on('join_chat', (userData) => {
 		socket.join('room_public'); 
@@ -53,6 +54,7 @@ io.on('connection', (socket) => {
 		console.log('Un utilisateur s\'est déconnecté');
 	});
 });
+
 
 const PORT = 3001;
 const NOMDB = "AndreBertok_DB"
@@ -76,19 +78,19 @@ app.use('/api/status', (req, res) => {
 	res.send('Serveur fonctionne bien !');
 })
 
-// Express redirige automatiquement le trafic vers les bons fichiers
+
+// Express redirige le trafic vers les bons fichiers
 app.use('/api/messages', messageRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 
 
-// ---------------------------------------------------------
+
 // LANCEMENT DU SERVEUR ET INITIALISATION BDD
-// ---------------------------------------------------------
 populateDB(NOMDB).then(() => {
-    server.listen(PORT, () => { 
-        console.log("Serveur OK ! - port : " + PORT); 
-    });
+	server.listen(PORT, () => { 
+		console.log("Serveur OK ! - port : " + PORT); 
+	});
 }).catch((err) => {
-    console.error("Erreur lors de l'initialisation de la base de données :", err);
+	console.error("Erreur lors de l'initialisation de la base de données :", err);
 });

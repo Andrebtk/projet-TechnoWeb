@@ -10,13 +10,13 @@ function Profile({ currentUser }) {
 	const loadUserMessages = async () => {
 		try {
 			const response = await fetch(`${API_URL}/api/users/${currentUser.login}/messages`, {
-			credentials: "include",
+				credentials: "include",
 			});
 			if (response.ok) {
-			const data = await response.json();
-			setMessages(data);
+				const data = await response.json();
+				setMessages(data);
 			} else {
-			setInfo("Erreur lors du chargement de l'historique.");
+				setInfo("Erreur lors du chargement de l'historique.");
 			}
 		} catch (error) {
 			setInfo("Impossible de contacter le serveur.");

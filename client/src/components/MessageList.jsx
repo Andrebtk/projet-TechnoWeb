@@ -9,14 +9,14 @@ function MessageList({ messages, isConnected, currentUser, onRefresh, onAuthorCl
 	return (
 		<div className="message-list" style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
 			{messages.map((msg, index) => (
-			<Message 
-				key={msg._id || msg.id || index} 
-				message={msg} 
-				isConnected={isConnected} 
-				currentUser={currentUser} 
-				onRefresh={onRefresh}
-				onAuthorClick={onAuthorClick} // 2. Et on le transmet au Message !
-			/>
+				<Message 
+					key={msg._id || msg.id || index} 
+					message={msg} 
+					isConnected={isConnected} 
+					currentUser={currentUser} 
+					onRefresh={onRefresh}
+					onAuthorClick={onAuthorClick} // 2. Et on le transmet au Message !
+				/>
 			))}
 		</div>
 	);

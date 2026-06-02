@@ -1,6 +1,7 @@
 const { MongoClient } = require('mongodb');
 
 async function testDB(client, dbName, collectionName) {
+	
 	const test = {
 		init: true
 	}
@@ -16,10 +17,10 @@ async function testDB(client, dbName, collectionName) {
 		await col1.insertOne(test);
 		console.log("Population terminée avec succès !");
 	}
-	}
+}
 
-	async function populate(client, dbName) {
-	// 1. Liste des utilisateurs
+async function populate(client, dbName) {
+	// Liste des utilisateurs
 	const listUsers = [
 		{ prenom: "Alice", nom: "Dupont", login: "alice", password: "password123", email: "alice.dupont@example.com", age: 28, role: "admin", isActive: true, createdAt: new Date() },
 		{ prenom: "Bob", nom: "Martin", login: "bob", password: "password123", email: "bob.martin@example.com", age: 34, role: "user", isActive: true, createdAt: new Date() },
@@ -35,7 +36,7 @@ async function testDB(client, dbName, collectionName) {
 	const userCollection = await client.db(dbName).collection("users");
 	await userCollection.insertMany(listUsers);
 
-	// 2. Liste des messages (Mise à jour avec la bonne structure)
+	//  Liste des messages
 	const listMessage = [
 		{
 			forum_id: "forum_ouvert",
@@ -132,9 +133,9 @@ async function testDB(client, dbName, collectionName) {
 
 	const messCollection = await client.db(dbName).collection("messages");
 	await messCollection.insertMany(listMessage);
-	}
+}
 
-	async function main() {
+async function main() {
 	const uri = "mongodb://localhost";
 	const client = new MongoClient(uri);
 
