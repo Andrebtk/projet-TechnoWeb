@@ -9,6 +9,7 @@ function Signin({ onSigninSuccess }) {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [age, setAge] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -30,6 +31,7 @@ function Signin({ onSigninSuccess }) {
           login,
           password,
           email,
+          age: Number(age)
         }),
       });
 
@@ -92,6 +94,17 @@ function Signin({ onSigninSuccess }) {
           type="email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
+        />
+
+        <label htmlFor="age">Âge</label>
+        <input
+            id="age"
+            type="number"
+            min="0"
+            max="120"
+            value={age}
+            onChange={(event) => setAge(event.target.value)}
+            placeholder="Ex: 19"
         />
 
         <button type="submit">Créer le compte</button>

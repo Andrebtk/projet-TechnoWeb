@@ -32,9 +32,12 @@ function Profile({ currentUser }) {
 			<h2>Mon Profil</h2>
 			
 			<div style={{ background: "#f9f9f9", padding: "15px", borderRadius: "8px", marginBottom: "20px" }}>
-			<p><strong>Prénom & Nom :</strong> {currentUser.prenom} {currentUser.nom}</p>
-			<p><strong>Login :</strong> {currentUser.login}</p>
-			<p><strong>Rôle :</strong> {currentUser.role === 'admin' ? 'Administrateur' : 'Membre'}</p>
+				<p><strong>Prénom & Nom :</strong> {currentUser.prenom} {currentUser.nom}</p>
+				<p><strong>Login :</strong> {currentUser.login}</p>
+
+				<p><strong>Âge :</strong> {currentUser.age ? `${currentUser.age} ans` : "Non renseigné"}</p>
+
+				<p><strong>Rôle :</strong> {currentUser.role === 'admin' ? 'Administrateur' : 'Membre'}</p>
 			</div>
 
 			<h3>Mes messages publiés ({messages.length})</h3>

@@ -5,7 +5,6 @@ const messageModel = require('../src/messageModel');
 const NOMDB = "projetDB";
 
 // GET /api/messages
-// GET /api/messages
 router.get('/', async (req, res) => {
 	try {
 		// 1. On vérifie le rôle de la personne connectée (si non connecté, c'est un 'user' par défaut)

@@ -25,7 +25,8 @@ router.post('/login', async (req, res) => {
 			login: user.login,
 			prenom: user.prenom,
 			nom: user.nom,
-			role: user.role || "user" 
+			role: user.role || "user",
+			age: user.age
 		};
 
 		res.json({ message: "Connexion réussie !", user: req.session.user });

@@ -2,21 +2,24 @@ import { useEffect, useState } from "react";
 import SearchZone from "./SearchZone";
 import NewMessageForm from "./NewMessageForm";
 import MessageList from "./MessageList";
+import PublicProfile from "./PublicProfile";
+
 
 const API_URL = "http://localhost:3001";
 
-function ForumPage({ isConnected, currentUser }) {
+function ForumPage({ isConnected, currentUser, activeTab, setActiveTab }) {
 	const [messages, setMessages] = useState([]);
 
 	const [searchResults, setSearchResults] = useState([]);
 	const [hasSearched, setHasSearched] = useState(false);
 
 	const [info, setInfo] = useState("");
-	const [activeTab, setActiveTab] = useState("list");
+
+	const [selectedUser, setSelectedUser] = useState(null);
 
 	useEffect(() => {
 		loadMessages();
-	}, []);
+	}, [activeTab]);
 
 	const loadMessages = async () => {
 		try {
@@ -108,58 +111,40 @@ function ForumPage({ isConnected, currentUser }) {
 
 	return (
 		<section className="page-card">
-		<h2>Forum Associatif</h2>
-
-		{/* Menu des Onglets */}
-		<div style={{ display: "flex", borderBottom: "2px solid #1f4e79", marginBottom: "20px" }}>
-			
-			<button style={tabStyle("list")} onClick={() => { setActiveTab("list"); loadMessages(); }}>
-				Forum Public
-			</button>
-
-			{/* Onglet Privé : Visible uniquement par les administrateurs */}
-			{isConnected && currentUser?.role === "admin" && (
-				<button style={tabStyle("private")} onClick={() => { setActiveTab("private"); loadMessages(); }}>
-					Forum Privé 
-				</button>
-			)}
-
-			<button style={tabStyle("search")} onClick={() => setActiveTab("search")}>
-				Recherche avancée
-			</button>
-
-			{isConnected && (
-				<button style={tabStyle("new")} onClick={() => setActiveTab("new")}>
-					Nouveau message
-				</button>
-			)}
-		</div>
-
+		
+		{/* Les anciens boutons onglets ont été supprimés ! */}
+		
 		{info && <p className="info-message">{info}</p>}
 
-		{/* Onglet 1 : Forum Public */}
 		{activeTab === "list" && (
-			<MessageList 
-				messages={publicMessages} 
-				isConnected={isConnected} 
-				currentUser={currentUser} 
-				onRefresh={loadMessages} 
-			/>
+			<>
+				<h2 style={{marginTop: 0, color: "#1f4e79"}}>Forum Public</h2>
+				<MessageList 
+					messages={publicMessages} 
+					isConnected={isConnected} 
+					currentUser={currentUser} 
+					onRefresh={loadMessages}
+					onAuthorClick={(login) => { setSelectedUser(login); setActiveTab("public_profile"); }}
+				/>
+			</>
 		)}
 
-		{/* Onglet 2 : Forum Privé */}
 		{activeTab === "private" && (
-			<MessageList 
-				messages={privateMessages} 
-				isConnected={isConnected} 
-				currentUser={currentUser} 
-				onRefresh={loadMessages} 
-			/>
+			<>
+				<h2 style={{marginTop: 0, color: "#d9534f"}}>Forum Privé</h2>
+				<MessageList 
+					messages={privateMessages} 
+					isConnected={isConnected} 
+					currentUser={currentUser} 
+					onRefresh={loadMessages} 
+					onAuthorClick={(login) => { setSelectedUser(login); setActiveTab("public_profile"); }}
+				/>
+			</>
 		)}
 
-		{/* Onglet 3 : Recherche */}
 		{activeTab === "search" && (
 			<>
+			<h2 style={{marginTop: 0, color: "#1f4e79"}}>Recherche avancée</h2>
 			<SearchZone onSearch={handleSearch} onReset={() => { setHasSearched(false); setSearchResults([]); setInfo(""); }} />
 			
 			{hasSearched ? (
@@ -170,6 +155,7 @@ function ForumPage({ isConnected, currentUser }) {
 					isConnected={isConnected} 
 					currentUser={currentUser} 
 					onRefresh={() => { loadMessages(); setHasSearched(false); setActiveTab("list"); }} 
+					onAuthorClick={(login) => { setSelectedUser(login); setActiveTab("public_profile"); }}
 				/>
 				</>
 			) : (
@@ -180,13 +166,22 @@ function ForumPage({ isConnected, currentUser }) {
 			</>
 		)}
 
-		{/* Onglet 4 : Nouveau Message */}
 		{activeTab === "new" && (
 			<NewMessageForm 
 				onSubmitMessage={handleCreateMessage} 
 				currentUser={currentUser}
 			/>
 		)}
+
+		{activeTab === "public_profile" && selectedUser && (
+			<PublicProfile 
+				login={selectedUser} 
+				isConnected={isConnected} 
+				currentUser={currentUser} 
+				onBack={() => setActiveTab("list")} 
+			/>
+		)}
+
 		</section>
 	);
 }

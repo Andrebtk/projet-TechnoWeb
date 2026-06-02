@@ -11,6 +11,8 @@ const API_URL = "http://localhost:3001";
 function MainPage() {
 	const [isConnected, setIsConnected] = useState(false);
 	const [currentUser, setCurrentUser] = useState(null);
+
+	const [forumTab, setForumTab] = useState("list");
 	const [page, setPage] = useState("forum_page");
 	const [message, setMessage] = useState("");
 
@@ -90,36 +92,43 @@ function MainPage() {
 	};
 
 	return (
-	<div className="app">
-		<header className="header">
-		<h1>Organiz'Asso</h1>
-		<p>Forum associatif</p>
-		</header>
+		<div className="app">
+			<header className="header">
+				<h1>Organiz'Asso</h1>
+				<p>Forum associatif</p>
+			</header>
 
-		<NavigationPanel
-			isConnected={isConnected}
-			currentUser={currentUser}
-			onLogin={handleLogin}
-			onLogout={handleLogout}
-			onGoForum={() => setPage("forum_page")}
-			onGoSignin={() => setPage("signin_page")}
-			onGoAdmin={() => setPage("admin_page")}
-			onGoProfile={() => setPage("profile_page")}
-		/>
+			<NavigationPanel
+				isConnected={isConnected}
+				currentUser={currentUser}
+				onLogin={handleLogin}
+				onLogout={handleLogout}
+				onGoForum={(tab) => { setPage("forum_page"); setForumTab(tab); }}
+				onGoSignin={() => setPage("signin_page")}
+				onGoAdmin={() => setPage("admin_page")}
+				onGoProfile={() => setPage("profile_page")}
+				currentPage={page}        
+				currentTab={forumTab}     
+			/>
 
-		{message && <p className="info-message">{message}</p>}
+			{message && <p className="info-message">{message}</p>}
 
-		<main className="main-content">
-			{page === "signin_page" && <Signin onSigninSuccess={handleSigninSuccess} />}
-			{page === "forum_page" && <ForumPage isConnected={isConnected} currentUser={currentUser} />}
-			{page === "admin_page" && <AdminPanel currentUser={currentUser} />}
-			{page === "profile_page" && <Profile currentUser={currentUser} />}
-		</main>
+			<main className="main-content">
+				{page === "signin_page" && <Signin onSigninSuccess={handleSigninSuccess} />}
+				{page === "forum_page" && (
+					<ForumPage 
+						isConnected={isConnected} 
+						currentUser={currentUser} 
+						activeTab={forumTab}         // <-- On l'envoie au Forum
+						setActiveTab={setForumTab}   // <-- On permet au forum de le changer (ex: clic sur auteur)
+					/>
+				)}
+				{page === "admin_page" && <AdminPanel currentUser={currentUser} />}
+				{page === "profile_page" && <Profile currentUser={currentUser} />}
+			</main>
 
-		{isConnected && currentUser && (
-			<Chat currentUser={currentUser} />
-		)}
-	</div>
+			{isConnected && <Chat currentUser={currentUser} />}
+		</div>
 	);
 }
 

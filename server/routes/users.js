@@ -100,16 +100,29 @@ router.put('/:id/status', async (req, res) => {
 	}
 });
 
-
-router.get('/:login/messages', async (req, res) => {
+// GET /api/users/:login -> Récupère les infos publiques d'un utilisateur
+router.get('/:login', async (req, res) => {
 	try {
-		const messages = await messageModel.getMessagesByUser(NOMDB, "messages", req.params.login);
-		res.json(messages);
-	} catch (error) {
-		res.status(500).json({ erreur: "Impossible de récupérer les messages du profil" });
+		const loginTarget = req.params.login;
+		
+		const user = await userModel.getUserByLogin(NOMDB, "users", loginTarget);
+		
+		if (!user) {
+			return res.status(404).json({ erreur: "Utilisateur introuvable" });
+		}
+
+		res.json({
+			login: user.login,
+			prenom: user.prenom || "Prénom inconnu",
+			nom: user.nom || "Nom inconnu",
+			role: user.role || "user",
+			age: user.age
+		});
+	} catch (e) {
+		console.error("Erreur récupération profil :", e);
+		res.status(500).json({ erreur: "Erreur serveur" });
 	}
 });
-
 
 // PUT /api/users/:id/role
 router.put('/:id/role', async (req, res) => {

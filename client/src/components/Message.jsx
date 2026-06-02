@@ -2,7 +2,7 @@ import { useState } from "react";
 
 const API_URL = "http://localhost:3001";
 
-function Message({ message, isConnected, currentUser, onRefresh }) {
+function Message({ message, isConnected, currentUser, onRefresh, onAuthorClick }) {
 	const [showCommentForm, setShowCommentForm] = useState(false);
 	const [commentText, setCommentText] = useState("");
 	const [info, setInfo] = useState("");
@@ -118,7 +118,18 @@ function Message({ message, isConnected, currentUser, onRefresh }) {
 			</>
 		)}
 
-		{message.author && <p className="message-meta">Auteur : {message.author}</p>}
+		{message.author && (
+			<p className="message-meta">
+				Auteur : 
+				<button 
+					onClick={() => onAuthorClick && onAuthorClick(message.author)} 
+					style={{background: "none", border: "none", color: "#1f4e79", textDecoration: "underline", cursor: "pointer", padding: "0 5px", fontSize: "1em"}}
+				>
+					{message.author}
+				</button>
+			</p>
+		)}
+		
 		{message.date && <p className="message-meta">Date : {new Date(message.date).toLocaleString()}</p>}
 
 		{/* Boutons d'action */}
