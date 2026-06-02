@@ -4,7 +4,7 @@ RAPPORT DE PROJET : BILAN ET PERSPECTIVES
 
 1. Répartition du travail
 ------------------------------------------------------
-Afin de travailler de manière efficace, nous avons opté pour une répartition claire des responsabilités : l'un s'est concentré sur le développement du Backend (API et base de données), tandis que l'autre a piloté la conception du Frontend (interface React). Néanmoins, cette séparation est restée flexible : en tant que responsable Backend, je suis également intervenu activement sur le Frontend pour soutenir le développement de l'interface et finaliser les fonctionnalités clés.
+Afin de travailler de manière efficace, nous avons opté pour une répartition claire des responsabilités : l'un s'est concentré sur le développement du Backend (API et base de données), tandis que l'autre a piloté la conception du Frontend (interface React). Néanmoins, cette séparation est restée flexible : en tant que responsable Backend, parfois il faut intervenir activement sur le Frontend pour soutenir le développement de l'interface et finaliser les fonctionnalités clés.
 
 
 * André Bertok : 
@@ -13,7 +13,12 @@ Afin de travailler de manière efficace, nous avons opté pour une répartition 
     - Intégration et sécurisation des sessions utilisateurs au niveau du serveur.
     - Soutien actif au développement de l'interface React pour garantir la cohérence client-serveur et finaliser l'intégration des fonctionnalités clés et des WebSockets.
 
-* ...
+* Kenzi Thiriet :
+    - Mise en place de la première base du Frontend React dans le dossier client.
+    - Création de l’interface principale d’Organiz’Asso : page d’accueil, navigation, connexion/déconnexion, inscription et affichage du forum.
+    - Développement des composants React de base : MainPage, NavigationPanel, Login, Logout, Signin, ForumPage, SearchZone, NewMessageForm, MessageList et Message.
+    - Intégration des premières requêtes vers l’API Backend existante : affichage des messages, recherche, création de compte, connexion et déconnexion.
+    - Réalisation des tests côté client pour vérifier la communication avec le serveur Express et la base MongoDB.
 
 
 
@@ -40,6 +45,8 @@ Bien que l'application soit 100% fonctionnelle et respecte l'ensemble du cahier 
 
 * Sécurisation avancée des mots de passe : 
     Les mots de passe sont actuellement stockés en texte brut dans la base de données de test. L'intégration d'un outil de hachage comme bcrypt serait la prochaine étape logique.
+
+* Améliorer potentiellement le coté UI/Design
 
 
 4. Choix de modélisation
